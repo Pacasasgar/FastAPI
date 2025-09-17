@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 app = FastAPI()
 
 app.title = "Mi primera API con FastAPI"
@@ -48,20 +48,39 @@ def home():
 # 'tags' es opcional y sirve para poner nombre a las rutas en la documentación
 # también se puede usar para agrupar rutas similares con el mismo tag
 
-@app.get("/movies", tags=["Home"])
+@app.get("/movies", tags=["Movies"])
 def get_movies():
     return movies
 
-@app.get("/movies/{id}", tags=["Home"])
+@app.get("/movies/{id}", tags=["Movies"]) # Path Parameter
 def get_movie(id: int):
    for movie in movies:
        if movie["id"] == id:
            return movie
    return []
 
-@app.get("/movies/", tags=["Home"])
+@app.get("/movies/", tags=["Movies"]) # Query Parameter
 def get_movie_by_category(category: str):
     for movie in movies:
        if movie["category"] == category:
            return movie
     return []
+
+@app.post("/movies", tags=["Movies"])
+def create_movie(
+    id: int = Body(),
+    title: str = Body(),
+    overview: str = Body(),
+    year: int = Body(),
+    rating: float = Body(),
+    category: str = Body()
+    ):
+    movies.append({
+        "id": id,
+        "title": title,
+        "overview": overview,
+        "year": year,
+        "rating": rating,
+        "category": category
+    })
+    return movies[-1] # Devuelve la última película añadida
