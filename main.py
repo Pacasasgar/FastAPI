@@ -1,6 +1,4 @@
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-
 app = FastAPI()
 
 app.title = "Mi primera API con FastAPI"
@@ -15,10 +13,35 @@ movies = [
         "rating": 7.9,
         "category": "Acción"
     }
+    ,{
+        "id": 2,
+        "title": "I Am Legend",
+        "overview": "Año 2012. Un virus ha convertido a la mayoría de la población mundial en ...",
+        "year": 2007,
+        "rating": 7.2,
+        "category": "Ciencia Ficción"
+    }
+    ,{
+        "id": 3,
+        "title": "300",
+        "overview": "Basada en la novela gráfica de Frank Miller, narra la historia de la Batalla de ...",
+        "year": 2006,
+        "rating": 7.7,
+        "category": "Acción"
+    }
+    ,{
+        "id": 4,
+        "title": "The Avengers",
+        "overview": "Loki, el hermano adoptivo del dios Thor, ha llegado a la Tierra con un ejército ...",
+        "year": 2012,
+        "rating": 8.1,
+        "category": "Acción"
+    }
 ]
 
 @app.get("/", tags=["Home"])
 def home():
+    #return HTMLResponse('<h1>Hola mundo</h1>')
     return "Hola mundo"
 
 # @app.get("/", tags=["Home"])
@@ -26,7 +49,13 @@ def home():
 # también se puede usar para agrupar rutas similares con el mismo tag
 
 @app.get("/movies", tags=["Home"])
-def home():
-    #return HTMLResponse('<h1>Hola mundo</h1>')
+def get_movies():
     return movies
+
+@app.get("/movies/{id}", tags=["Home"])
+def get_movie(id: int):
+   for movie in movies:
+       if movie["id"] == id:
+           return movie
+   return []
 
