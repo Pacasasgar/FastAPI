@@ -45,3 +45,13 @@ uvicorn main:app --port 5000 --reload
 * **`--reload`**: ¡Tu mejor amigo durante el desarrollo! Reinicia el servidor automáticamente cada vez que guardas un cambio en el código.
 * **`--port 5000`**: Modifica el puerto de escucha. Por defecto, `uvicorn` usa el puerto `8000`.
 * **`--host 0.0.0.0`**: (Opcional) Permite que otros dispositivos en tu misma red accedan a tu servidor. Por defecto es `127.0.0.1` (solo accesible desde tu propio PC).
+
+---
+
+## 3. Conceptos
+
+| Tipo             | ¿Cómo se envía?                 | Propósito Principal                             | Ejemplo de URL / Body        |
+| :--------------- | :------------------------------ | :---------------------------------------------- | :--------------------------- |
+| **Path Parameter** | En la ruta de la URL            | 🎯 Identificar **un recurso único** | `GET /movies/5`              |
+| **Query Parameter**| Al final de la URL (`?` y `&`) | 🔍 **Filtrar, ordenar o paginar** una lista     | `GET /movies?category=Comedia` |
+| **Request Body** | "Oculto" en la petición         | ➕ **Crear o actualizar** recursos (con `POST`/`PUT`) | `POST /movies` con JSON en body |
