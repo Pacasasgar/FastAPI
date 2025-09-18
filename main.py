@@ -1,8 +1,27 @@
 from fastapi import FastAPI, Body
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+from typing import Optional, List
+
 app = FastAPI()
 
 app.title = "Mi primera API con FastAPI"
 #app.version = "1.0.1" # Se puede definir la versión de la API manualmente
+
+class Movie(BaseModel):
+    id: int
+    title: str
+    overview: str
+    year: int
+    rating: float
+    category: str
+
+class MovieUpdate(BaseModel):
+    title: Optional[str] = None
+    overview: Optional[str] = None
+    year: Optional[int] = None
+    rating: Optional[float] = None
+    category: Optional[str] = None
 
 movies = [
     {
@@ -49,62 +68,41 @@ def home():
 # también se puede usar para agrupar rutas similares con el mismo tag
 
 @app.get("/movies", tags=["Movies"])
-def get_movies():
+def get_movies() -> List[Movie]:
     return movies
 
 @app.get("/movies/{id}", tags=["Movies"]) # Path Parameter
-def get_movie(id: int):
+def get_movie(id: int) -> Movie:
    for movie in movies:
        if movie["id"] == id:
            return movie
    return []
 
 @app.get("/movies/", tags=["Movies"]) # Query Parameter
-def get_movie_by_category(category: str):
+def get_movie_by_category(category: str) -> List[Movie]:
     for movie in movies:
        if movie["category"] == category:
            return movie
     return []
 
 @app.post("/movies", tags=["Movies"])
-def create_movie(
-    id: int = Body(),
-    title: str = Body(),
-    overview: str = Body(),
-    year: int = Body(),
-    rating: float = Body(),
-    category: str = Body()
-    ):
-    movies.append({
-        "id": id,
-        "title": title,
-        "overview": overview,
-        "year": year,
-        "rating": rating,
-        "category": category
-    })
+def create_movie(movie: Movie) -> List[Movie]:
+    movies.append(movie.model_dump()) # model_dump() convierte el objeto movie en un diccionario
     return movies[-1] # Devuelve la última película añadida
 
 @app.put("/movies/{id}", tags=["Movies"])
-def update_movie(
-    id: int,
-    title: str = Body(),
-    overview: str = Body(),
-    year: int = Body(),
-    rating: float = Body(),
-    category: str = Body()
-    ):
-    for movie in movies:
-        if movie["id"] == id:
-            movie ["title"] = title
-            movie ["overview"] = overview
-            movie ["year"] = year
-            movie ["rating"] = rating
-            movie ["category"] = category
+def update_movie(id: int, movie: MovieUpdate) -> List[Movie]:
+    for item in movies:
+        if item["id"] == id:
+            item ["title"] = movie.title
+            item ["overview"] = movie.overview
+            item ["year"] = movie.year
+            item ["rating"] = movie.rating
+            item ["category"] = movie.category
     return movies
 
 @app.delete("/movies/{id}", tags=["Movies"])
-def delete_movie(id: int):
+def delete_movie(id: int) -> List[Movie]:
     for movie in movies:
         if movie["id"] == id:
             movies.remove(movie)
