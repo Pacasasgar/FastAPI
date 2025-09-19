@@ -1,4 +1,4 @@
-# Notes
+# Información básica
 
 ## 1. Activación del Entorno Virtual
 
