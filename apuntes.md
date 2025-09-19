@@ -52,6 +52,6 @@ uvicorn main:app --port 5000 --reload
 
 | Tipo             | ¿Cómo se envía?                 | Propósito Principal                             | Ejemplo de URL / Body        |
 | :--------------- | :------------------------------ | :---------------------------------------------- | :--------------------------- |
-| **Path Parameter** | En la ruta de la URL            | 🎯 Identificar **un recurso único** | `GET /movies/5`              |
-| **Query Parameter**| Al final de la URL (`?` y `&`) | 🔍 **Filtrar, ordenar o paginar** una lista     | `GET /movies?category=Comedia` |
-| **Request Body** | "Oculto" en la petición         | ➕ **Crear o actualizar** recursos (con `POST`/`PUT`) | `POST /movies` con JSON en body |
+| **Path Parameter** | En la ruta de la URL            | Identificar **un recurso único** | `GET /movies/5`              |
+| **Query Parameter**| Al final de la URL (`?` y `&`) | **Filtrar, ordenar o paginar** una lista     | `GET /movies?category=Comedia` |
+| **Request Body** | "Oculto" en la petición         | **Crear o actualizar** recursos (con `POST`/`PUT`) | `POST /movies` con JSON en body |
