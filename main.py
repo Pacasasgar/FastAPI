@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
+import datetime
 
 app = FastAPI()
 
@@ -22,6 +23,27 @@ class MovieUpdate(BaseModel):
     year: Optional[int] = None
     rating: Optional[float] = None
     category: Optional[str] = None
+
+class MovieCreate(BaseModel):
+    id: int
+    title: str = Field(min_length=5, max_length=15, default="My Movie") # default es opcional
+    overview: str = Field(min_length=5, max_length=50, default="My Overview")
+    year: int = Field(le=datetime.date.today().year, ge=1900) # le = less than or equal to
+    rating: float = Field(le=10, ge=0) # ge = greater than or equal to
+    category: str
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "id": 1,
+                "title": "My Movie",
+                "overview": "My Overview",
+                "year": 2023,
+                "rating": 7.5,
+                "category": "Action"
+            }
+        }
+    } # Se usa como valor por defecto en la documentación de la API
 
 movies = [
     {
@@ -86,7 +108,7 @@ def get_movie_by_category(category: str) -> List[Movie]:
     return []
 
 @app.post("/movies", tags=["Movies"])
-def create_movie(movie: Movie) -> List[Movie]:
+def create_movie(movie: MovieCreate) -> Movie:
     movies.append(movie.model_dump()) # model_dump() convierte el objeto movie en un diccionario
     return movies[-1] # Devuelve la última película añadida
 
